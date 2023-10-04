@@ -16,6 +16,9 @@ Person **people;
 size_t length = 0;
 size_t capacity = 0;
 
+/**
+ * Clears the scanf buffer and also waits user's enter key input.
+*/
 void wait_user_input(void)
 {
 	getchar();
@@ -23,6 +26,9 @@ void wait_user_input(void)
 	getchar();
 }
 
+/**
+ * Shows the interactive menu that the user will see.
+*/
 void print_menu(void)
 {
 	system("clear");
@@ -35,6 +41,10 @@ void print_menu(void)
 	printf("Type -1 to exit the program.\n");
 }
 
+/**
+ * Shows all information about a person giving their specific index in the array.
+ * @param index The index that'll be used to access the person in the array.
+*/
 void print_person(int index)
 {
 	printf("\n%d° person:\n", index + 1);
@@ -45,6 +55,11 @@ void print_person(int index)
 	printf("Phone: %s\n\n", people[index]->phone);
 }
 
+/* ========== START OF ARRAY UTILS ========== */
+
+/**
+ * Checks if an error occurred while dynamically changing the size of the array.
+*/
 void check_error(void)
 {
 	if (people != NULL) return;
@@ -53,6 +68,10 @@ void check_error(void)
 	exit(1);
 }
 
+/**
+ * Allocates the specific size, defined in "DEFAULT_CAPACITY",
+ * the array will start with.
+*/
 void initialize_array(void)
 {
 	if (capacity != 0) return;
@@ -63,6 +82,11 @@ void initialize_array(void)
 	capacity = DEFAULT_CAPACITY;
 }
 
+/**
+ * Used after an array entry receives NULL, which means it was deleted.
+ * Reorganizes the array to push the NULL value to the end,
+ * finding its index and swapping positions until necessary.
+*/
 void organize_array(void)
 {
 	int null_index = -1;
@@ -87,6 +111,10 @@ void organize_array(void)
 	}
 }
 
+/**
+ * Increases the size of the array, when
+ * there's no space left to insert new entries.
+*/
 void grow_array_if_needed(void)
 {
 	if (length == capacity)
@@ -99,6 +127,10 @@ void grow_array_if_needed(void)
 	}
 }
 
+/**
+ * Decreases the size of the array, when there's too much space that
+ * won't be used yet.
+*/
 void shrink_array_if_needed(void)
 {
 	if (length > 0 && length == capacity - DEFAULT_CAPACITY)
@@ -112,6 +144,10 @@ void shrink_array_if_needed(void)
 	}
 }
 
+/**
+ * Liberates all memory that was being used by the array.
+ * Also resets all values to NULL or zero.
+*/
 void destroy_array(void)
 {
 	for (int i = 0; i < length; i++)
@@ -126,6 +162,13 @@ void destroy_array(void)
 	length = 0;
 }
 
+/* ========== END OF ARRAY UTILS ========== */
+
+/* ========== START OF CRUD FUNCTIONS ========== */
+
+/**
+ * Inserts a Person in the end of the array, using the length variable.
+*/
 void insert_person(void)
 {
 	system("clear");
@@ -164,6 +207,9 @@ void insert_person(void)
 	wait_user_input();
 }
 
+/**
+ * Shows information about all Person entries that were inserted in the array.
+*/
 void select_people(void)
 {
 	system("clear");
@@ -184,6 +230,10 @@ void select_people(void)
 	wait_user_input();
 }
 
+/**
+ * Finds using CPF struct member and shows information about a specific Person.
+ * @return The index of the Person entry in the array, or -1.
+*/
 int select_person(void)
 {
 	system("clear");
@@ -215,6 +265,9 @@ int select_person(void)
 	return -1;
 }
 
+/**
+ * Changes information about a Person, using its index in the array. 
+*/
 void update_person(void)
 {
 	int index = select_person();
@@ -245,6 +298,10 @@ void update_person(void)
 	wait_user_input();
 }
 
+/**
+ * Liberates the memory that was used by a specific Person entry,
+ * and sets the value in that position to NULL.
+*/
 void delete_person(void)
 {
 	int index = select_person();
@@ -264,6 +321,8 @@ void delete_person(void)
 
 	shrink_array_if_needed();
 }
+
+/* ========== END OF CRUD FUNCTIONS ========== */
 
 int main(void)
 {
