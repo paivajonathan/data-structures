@@ -327,12 +327,14 @@ void delete_person(void)
 int main(void)
 {
 	initialize_array();
-	int answer;
+	int answer = 0;
 
 	while(answer != -1)
 	{
 		print_menu();
 		scanf(" %d", &answer);
+
+		if (answer == -1) break;
 
 		switch(answer)
 		{
@@ -355,6 +357,8 @@ int main(void)
 				getchar();
 				break;
 		}
+
+		answer = 0;
 	}
 
 	printf("The program has been terminated!\n");
