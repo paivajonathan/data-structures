@@ -6,8 +6,8 @@ const size_t DEFAULT_CAPACITY = 3;
 
 typedef struct {
 	char name[50];
-	char cpf[11];
-	char phone[11];
+	char cpf[12];
+	char phone[12];
 	char gender;
 	int age;
 } Person;
@@ -21,7 +21,6 @@ size_t capacity = 0;
 */
 void wait_user_input(void)
 {
-	getchar();
 	printf("Press enter to continue...\n");
 	getchar();
 }
@@ -187,18 +186,23 @@ void insert_person(void)
 	
 	printf("Type their name:\n");
 	scanf("%[^\n]s", person->name);
+	getchar();
 
 	printf("Type their cpf:\n");
 	scanf("%s", person->cpf);
+	getchar();
 	
 	printf("Type their age:\n");
-	scanf("%d", &person->age);
+	scanf(" %d", &person->age);
+	getchar();
 	
 	printf("Type their gender:\n");
 	scanf(" %c", &person->gender);
+	getchar();
 	
 	printf("Type their phone:\n");
 	scanf("%s", person->phone);
+	getchar();
 
 	people[length] = person;
 	length++;
@@ -245,9 +249,10 @@ int select_person(void)
 		return -1;
 	}
 
-	char cpf[11];
+	char cpf[12];
 	printf("Type the person's CPF:\n");
 	scanf("%s", cpf);
+	getchar();
 
 	for (int i = 0; i < length; i++)
 	{
@@ -281,18 +286,23 @@ void update_person(void)
 	system("clear");
 	printf("Type their new name:\n");
 	scanf("%[^\n]s", people[index]->name);
+	getchar();
 
 	printf("Type their new cpf:\n");
 	scanf("%s", people[index]->cpf);
+	getchar();
 	
 	printf("Type their new age:\n");
-	scanf("%d", &people[index]->age);
+	scanf(" %d", &people[index]->age);
+	getchar();
 	
 	printf("Type their new gender:\n");
 	scanf(" %c", &people[index]->gender);
+	getchar();
 	
 	printf("Type their new phone:\n");
 	scanf("%s", people[index]->phone);
+	getchar();
 
 	printf("Person's informations successfully changed!\n");
 	wait_user_input();
@@ -309,15 +319,18 @@ void delete_person(void)
 	if (index == -1) return;
 
 	system("clear");
+
 	printf("Deleting person...\n");
 	wait_user_input();
-	system("clear");
 
 	free(people[index]);
 	people[index] = NULL;
 	organize_array();
 	length--;
+
+	system("clear");
 	printf("Person successfully deleted!\n");
+	wait_user_input();
 
 	shrink_array_if_needed();
 }
@@ -333,6 +346,7 @@ int main(void)
 	{
 		print_menu();
 		scanf(" %d", &answer);
+		getchar();
 
 		if (answer == -1) break;
 
@@ -354,7 +368,9 @@ int main(void)
 				select_people();
 				break;
 			default:
-				getchar();
+				system("clear");
+				printf("Type a valid value!\n");
+				wait_user_input();
 				break;
 		}
 
