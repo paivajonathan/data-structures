@@ -5,7 +5,7 @@
 const size_t DEFAULT_CAPACITY = 3;
 
 typedef struct {
-	char name[50];
+	char name[51];
 	char cpf[12];
 	char phone[12];
 	char gender;
