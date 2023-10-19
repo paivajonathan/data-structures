@@ -19,26 +19,12 @@ size_t capacity = 0;
 /**
  * Clears the scanf buffer and also waits user's enter key input.
 */
-void wait_user_input(void)
-{
-	printf("Press enter to continue...\n");
-	getchar();
-}
+void wait_user_input(void);
 
 /**
  * Shows the interactive menu that the user will see.
 */
-void print_menu(void)
-{
-	system("clear");
-	printf("What action do you want to do?\n");
-	printf("Type 1 to insert a person.\n");
-	printf("Type 2 to update a person.\n");
-	printf("Type 3 to delete a person.\n");
-	printf("Type 4 to select a person.\n");
-	printf("Type 5 to select all people.\n");
-	printf("Type -1 to exit the program.\n");
-}
+void print_menu(void);
 
 /**
  * Shows all information about a person giving their specific index in the array.
@@ -141,6 +127,18 @@ void shrink_array_if_needed(void)
 		check_error();
 		wait_user_input();
 	}
+}
+
+/**
+ * Liberates the memory that was used by a specific Person entry,
+ * and sets the value in that position to NULL.
+*/
+void delete_from_array(int index) {
+	free(people[index]);
+	people[index] = NULL;
+	organize_array();
+	length--;
+	shrink_array_if_needed();
 }
 
 /**
@@ -271,7 +269,8 @@ int select_person(void)
 }
 
 /**
- * Changes information about a Person, using its index in the array. 
+ * Gets the index of a Person entry using their CPF,
+ * and updates its informations.
 */
 void update_person(void)
 {
@@ -309,8 +308,8 @@ void update_person(void)
 }
 
 /**
- * Liberates the memory that was used by a specific Person entry,
- * and sets the value in that position to NULL.
+ * Gets the index of a Person entry using its CPF,
+ * and removes it from the people array.
 */
 void delete_person(void)
 {
@@ -319,23 +318,44 @@ void delete_person(void)
 	if (index == -1) return;
 
 	system("clear");
-
 	printf("Deleting person...\n");
 	wait_user_input();
 
-	free(people[index]);
-	people[index] = NULL;
-	organize_array();
-	length--;
+	delete_from_array(index);
 
 	system("clear");
 	printf("Person successfully deleted!\n");
 	wait_user_input();
-
-	shrink_array_if_needed();
 }
 
 /* ========== END OF CRUD FUNCTIONS ========== */
+
+/* ========== START OF DATA STRUCTURE FUNCTIONS ========== */
+
+/**
+ * Removes the last person from the people array,
+ * to simulate the behavior of a stack data structure.
+*/
+void call_person_stack(void) {
+	if (length == 0)
+	{
+		system("clear");
+		printf("There's no person to call yet!\n");
+		wait_user_input();
+		return;
+	}
+
+	size_t index = length - 1;
+
+	system("clear");
+	printf("Calling last person!\n");
+	print_person(index);
+	wait_user_input();
+
+	delete_from_array(index);
+}
+
+/* ========== END OF DATA STRUCTURE FUNCTIONS ========== */
 
 int main(void)
 {
@@ -367,6 +387,9 @@ int main(void)
 			case 5:
 				select_people();
 				break;
+			case 6:
+				call_person_stack();
+				break;
 			default:
 				system("clear");
 				printf("Type a valid value!\n");
@@ -380,4 +403,23 @@ int main(void)
 	printf("The program has been terminated!\n");
 	destroy_array();
 	return 0;
+}
+
+void wait_user_input(void)
+{
+	printf("Press enter to continue...\n");
+	getchar();
+}
+
+void print_menu(void)
+{
+	system("clear");
+	printf("What action do you want to do?\n");
+	printf("Type 1 to insert a person.\n");
+	printf("Type 2 to update a person.\n");
+	printf("Type 3 to delete a person.\n");
+	printf("Type 4 to select a person.\n");
+	printf("Type 5 to select all people.\n");
+	printf("Type 6 to call the last person.\n");
+	printf("Type -1 to exit the program.\n");
 }
