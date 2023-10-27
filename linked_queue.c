@@ -4,11 +4,12 @@
 
 #ifdef _WIN32
     #define CLEAR "cls"
-#else //In any other OS
+#else
     #define CLEAR "clear"
 #endif
 
-typedef struct Person {
+typedef struct Person
+{
 	char name[51];
 	char cpf[12];
 	char phone[12];
@@ -28,95 +29,117 @@ void print_person(Person* person)
 	printf("Age: %d\n\n", person->age);
 }
 
-void show_all(void) {
+void show_people(void)
+{
     system(CLEAR);
 
-    if (head == NULL) {
+    if (head == NULL)
+    {
         printf("There's no person registered yet!\n");
         getchar();
         return;
     }
 
-    Person* person = head;
+    Person* current_person = head;
 
-    while (person != NULL) {
-        print_person(person);
-        person = person->next;
+    while (current_person != NULL)
+    {
+        print_person(current_person);
+        current_person = current_person->next;
     }
 
     getchar();
 }
 
-void link_list(Person* next_person) {
-    if (head == NULL) {
+void enqueue(Person* next_person)
+{
+    if (head == NULL)
+    {
         head = next_person;
         return;
     }
 
-    Person* person = head;
+    Person* current_person = head;
 
-    while (person->next != NULL) {
-        person = person->next;
+    while (current_person->next != NULL)
+    {
+        current_person = current_person->next;
     }
 
-    person->next = next_person;
+    current_person->next = next_person;
 }
 
-void register_person(void) {
+void register_person(void)
+{
     system(CLEAR);
-    Person* person = malloc(sizeof(Person));
+    Person* new_person = malloc(sizeof(Person));
     
-    if (person == NULL) return;
+    if (new_person == NULL)
+    {
+        printf("An error occurred while creating a new_person!\n");
+        return;
+    }
 
     printf("Type their name:\n");
-    scanf("%[^\n]s", person->name);
+    scanf("%[^\n]s", new_person->name);
     getchar();
 
     printf("Type their CPF:\n");
-    scanf("%s", person->cpf);
+    scanf("%s", new_person->cpf);
     getchar();
 
     printf("Type their phone number:\n");
-    scanf("%s", person->phone);
+    scanf("%s", new_person->phone);
     getchar();
 
     printf("Type their gender:\n");
-    scanf(" %c", &person->gender);
+    scanf(" %c", &new_person->gender);
     getchar();
 
     printf("Type their age:\n");
-    scanf(" %d", &person->age);
+    scanf(" %d", &new_person->age);
     getchar();
 
-    person->next = NULL;
-    link_list(person);
+    new_person->next = NULL;
+    enqueue(new_person);
 }
 
-void delete_first(void) {
+void dequeue(void)
+{
     system(CLEAR);
-    if (head == NULL) {
+    if (head == NULL)
+    {
         printf("There's no person registered yet!\n");
         getchar();
         return;
     }
 
-    Person* first_person = head;
+    print_person(head);
 
-    if (first_person->next == NULL) {
-        free(first_person);
-        first_person = NULL;
-        head = NULL;
-    } else {
-        head = first_person->next;
-        free(first_person);
-        first_person = NULL;
-    }
+    Person* previous_head = head;
+    head = head->next;
+    free(previous_head);
+    previous_head = NULL;
     
     printf("First person deleted with success!\n");
     getchar();
 }
 
-void show_menu(void) {
+void destroy_queue(void)
+{
+    Person* previous_head;
+
+    while(head != NULL)
+    {
+        previous_head = head;
+        head = head->next;
+        free(previous_head);
+        previous_head = NULL;
+    }
+}
+
+void show_menu(void)
+{
     system(CLEAR);
     printf("1 to register a person.\n");
     printf("2 to show all the registered people.\n");
@@ -124,25 +147,28 @@ void show_menu(void) {
     printf("-1 to leave.\n");
 }
 
-int main(void) {
+int main(void)
+{
     int answer = 0;
 
-    while(answer != -1) {
+    while(answer != -1)
+    {
         show_menu();
         scanf(" %d", &answer);
         getchar();
 
         if (answer == -1) break;
 
-        switch(answer) {
+        switch(answer)
+        {
             case 1:
                 register_person();
                 break;
             case 2:
-                show_all();
+                show_people();
                 break;
             case 3:
-                delete_first();
+                dequeue();
                 break;
             default:
                 printf("Type a valid number!\n");
@@ -153,5 +179,6 @@ int main(void) {
         answer = 0;
     }
 
+    destroy_queue();
     return 0;
 }
